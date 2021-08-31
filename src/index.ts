@@ -47,6 +47,11 @@ const CodeDecorator: Visitor<PluginPass> = {
   ArrowFunctionExpression:  {
     exit(path: NodePath<ArrowFunctionExpression>, state: PluginPass) {
 
+      if (path.node.generator) {
+        path.skip();
+        return;
+      }
+
       const filename = state.file.opts.filename;
       const row = path.node.loc?.start.line;
       const column = path.node.loc?.start.column;
@@ -77,12 +82,18 @@ const CodeDecorator: Visitor<PluginPass> = {
   },
   FunctionDeclaration: {
     exit(path: NodePath<FunctionDeclaration>, state: PluginPass) {
+
+      if (path.node.generator) {
+        path.skip();
+        return;
+      }
+
       const filename = state.file.opts.filename;
       const row = path.node.loc?.start.line;
       const column = path.node.loc?.start.column;
       const isAsync = path.node.async === true;
       const funcName = path.node.id?.name;
-      console.info(`ArrowFunctionExpression: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
+      console.info(`FunctionDeclaration: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
 
       // 头部插入
       const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
@@ -112,12 +123,18 @@ const CodeDecorator: Visitor<PluginPass> = {
   },
   FunctionExpression: {
     exit(path: NodePath<FunctionExpression>, state: PluginPass) {
+
+      if (path.node.generator) {
+        path.skip();
+        return;
+      }
+
       const filename = state.file.opts.filename;
       const row = path.node.loc?.start.line;
       const column = path.node.loc?.start.column;
       const isAsync = path.node.async === true;
       const funcName = path.node.id?.name;
-      console.info(`ArrowFunctionExpression: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
+      console.info(`FunctionExpression: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
 
       // 头部插入
       const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
@@ -147,6 +164,10 @@ const CodeDecorator: Visitor<PluginPass> = {
   },
   ObjectMethod: {
     exit(path: NodePath<ObjectMethod>, state: PluginPass) {
+      if (path.node.generator) {
+        // path.skip();
+        // return;
+      }
       if (path.node.kind !== 'method') {
         path.skip();
         return;
@@ -161,15 +182,15 @@ const CodeDecorator: Visitor<PluginPass> = {
       } else if (path.node.key.type === 'StringLiteral' || path.node.key.type === 'NumericLiteral') {
         funcName = String(path.node.key.value);
       }
-      console.info(`ArrowFunctionExpression: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
+      console.info(`ObjectMethod: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
 
       // 头部插入
       const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
       const pre = Helper.buildPreInject(varName, String(filename), String(row), String(column), String(isAsync), funcName);
       // 原函数
-      const originFunc = t.arrowFunctionExpression([], path.node.body, path.node.async);
+      const originFunc = t.functionExpression(null, [], path.node.body, path.node.generator, path.node.async);
       // 方法调用
-      const funcCall = t.callExpression(originFunc, []);
+      const funcCall =  t.callExpression(originFunc, []);
       const resId = path.scope.generateUidIdentifier('_res');
       const resDecl = t.variableDeclaration('const', [
         t.variableDeclarator(resId, funcCall)
@@ -194,6 +215,10 @@ const CodeDecorator: Visitor<PluginPass> = {
   },
   ClassMethod: {
     exit(path: NodePath<ClassMethod>, state: PluginPass) {
+      if (path.node.generator) {
+        path.skip();
+        return;
+      }
       if (path.node.kind !== 'method') {
         path.skip();
         return;
@@ -209,7 +234,7 @@ const CodeDecorator: Visitor<PluginPass> = {
       } else if (path.node.key.type === 'StringLiteral' || path.node.key.type === 'NumericLiteral') {
         funcName = String(path.node.key.value);
       }
-      console.info(`ArrowFunctionExpression: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
+      console.info(`ClassMethod: ${filename}:${row}:${column} funcName: ${funcName} isAsync: ${isAsync}`);
       // 头部插入
       const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
       const pre = Helper.buildPreInject(varName, String(filename), String(row), String(column), String(isAsync), funcName);
