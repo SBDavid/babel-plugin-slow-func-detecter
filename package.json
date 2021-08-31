@@ -1,0 +1,26 @@
+{
+  "name": "babel-plugin-transform-slow-func-detecter",
+  "version": "1.0.1",
+  "description": "拦截react-natve的press事件，并发送埋点数据",
+  "main": "lib/index.js",
+  "scripts": {
+    "dev": "rm -rf lib && tsc -w",
+    "build": "rm -rf lib && tsc",
+    "babel": "babel ./src --watch --out-dir lib --extensions '.ts,.tsx,.js'",
+    "exe": "node lib/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/helper-plugin-utils": "^7.14.5"
+  },
+  "devDependencies": {
+    "@types/babel__helper-plugin-utils": "^7.10.0",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.2.2",
+    "@babel/plugin-proposal-class-properties": "^7.3.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/preset-typescript": "^7.1.0"
+  }
+}
