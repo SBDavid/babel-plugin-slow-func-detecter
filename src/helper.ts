@@ -1,34 +1,43 @@
-import type { NodePath } from "@babel/core";
-import { template } from '@babel/core';
-import type { Function, Statement } from "@babel/types";
+import type {NodePath} from '@babel/core';
+
+import type { Function, Statement, Identifier } from "@babel/types";
+import { template } from "@babel/core";
 
 export default class Helper {
   static fileFilter(filename: string | null | undefined) {
     return  typeof filename === 'string' && filename.indexOf('node_modules') == -1;
   }
 
-  static buildPreInject(path: NodePath<Function>, filename: string, row: string, isAsync: string): Statement{
+  static buildPreInject(varName: Identifier, filename: string, row: string, column: string, isAsync: string, funcName?: String): Statement{
 
     const temp = `
-      const FILENAME = {
+      const SDFINFO = {
         fileName: '${filename}',
         row: ${row},
+        column: ${column},
         isAsync: ${isAsync},
+        funcName: '${funcName}',
         time: Date.now()
       };
     `;
 
-    const temp1 = `
-      console.info({
-        fileName: '${filename}',
-        row: ${row},
-        isAsync: ${isAsync},
-        time: Date.now()
-      });
+    return template(temp)({
+      SDFINFO: varName
+    }) as Statement;
+  }
+
+  static buildPostInject(path: NodePath<Function>, varName: Identifier, runDuration: number): Statement[]{
+
+    const temp = `
+      const ENDTIME = Date.now();
+      if (ENDTIME - SDFINFO.time > ${runDuration}) {
+        console.info('time: ' + String(ENDTIME - SDFINFO.time) + ' path: ' + SDFINFO.fileName + ':' + SDFINFO.row + ':' + SDFINFO.column + ' funcName: ' + SDFINFO.funcName);
+      }
     `;
 
-    return template(temp1)({
-      FILENAME: path.scope.generateUidIdentifier('_sfdInfo')
-    }) as Statement;
+    return template(temp)({
+      SDFINFO: varName,
+      ENDTIME: path.scope.generateUidIdentifierBasedOnNode(path.node, '_endTime')
+    }) as Statement[];
   }
 }
