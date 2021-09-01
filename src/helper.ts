@@ -1,4 +1,4 @@
-import type {NodePath} from '@babel/core';
+import type { NodePath, PluginPass } from '@babel/core';
 
 import type { Function, Statement, Identifier } from "@babel/types";
 import { template } from "@babel/core";
@@ -8,14 +8,15 @@ export default class Helper {
     return  typeof filename === 'string' && filename.indexOf('node_modules') == -1;
   }
 
-  static buildPreInject(varName: Identifier, filename: string, row: string, column: string, isAsync: string, funcName?: String): Statement{
+  static buildPreInject(varName: Identifier, path: NodePath<Function>, state: PluginPass, funcName?: String): Statement{
 
     const temp = `
       const SDFINFO = {
-        fileName: '${filename}',
-        row: ${row},
-        column: ${column},
-        isAsync: ${isAsync},
+        fileName: '${state.file.opts.filename}',
+        row: ${path.node.loc?.start.line},
+        column: ${path.node.loc?.start.column},
+        isAsync: ${path.node.async === true},
+        isGenerator: ${path.node.generator === true},
         funcName: '${funcName}',
         time: Date.now()
       };
@@ -31,7 +32,7 @@ export default class Helper {
     const temp = `
       const ENDTIME = Date.now();
       if (ENDTIME - SDFINFO.time > ${runDuration}) {
-        console.info('time: ' + String(ENDTIME - SDFINFO.time) + ' path: ' + SDFINFO.fileName + ':' + SDFINFO.row + ':' + SDFINFO.column + ' funcName: ' + SDFINFO.funcName);
+        console.info('SFD: ' + String(ENDTIME - SDFINFO.time) + ' path: ' + SDFINFO.fileName + ':' + SDFINFO.row + ':' + SDFINFO.column + ' funcName: ' + SDFINFO.funcName + ' ayc: ' + SDFINFO.isAsync + ' genrt: ' + SDFINFO.isGenerator);
       }
     `;
 
@@ -39,5 +40,14 @@ export default class Helper {
       SDFINFO: varName,
       ENDTIME: path.scope.generateUidIdentifierBasedOnNode(path.node, '_endTime')
     }) as Statement[];
+  }
+
+  static printTransformInfo(path: NodePath<Function>, state: PluginPass, funcName?: String) {
+    const filename = state.file.opts.filename;
+    const row = path.node.loc?.start.line;
+    const column = path.node.loc?.start.column;
+    const isAsync = path.node.async === true;
+    const isGenerator = path.node.generator === true;
+    console.info(`${path.node.type}: ${filename}:${row}:${column} funcName: ${funcName} ayc: ${isAsync} genrt: ${isGenerator}`);
   }
 }
