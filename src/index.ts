@@ -52,13 +52,13 @@ const CodeDecorator: Visitor<PluginPass> = {
       // 原函数
       const originArrayFunc = t.arrowFunctionExpression([], path.node.body, path.node.async);
       // 方法调用
-      const funcCall = t.callExpression(originArrayFunc, []);
+      const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originArrayFunc, [])) : t.callExpression(originArrayFunc, []);
       const resId = path.scope.generateUidIdentifier('_res');
       const resDecl = t.variableDeclaration('const', [
         t.variableDeclarator(resId, funcCall)
       ]);
       // 尾部插入
-      const post = Helper.buildPostInject(path, varName, 0);
+      const post = Helper.buildPostInject(path, varName, 1);
       // 返回值
       const ret = t.returnStatement(resId);
 
@@ -84,13 +84,13 @@ const CodeDecorator: Visitor<PluginPass> = {
       // 原函数体
       const originFuncDecl = t.arrowFunctionExpression([], path.node.body, path.node.async);
       // 方法调用
-      const funcCall = t.callExpression(originFuncDecl, []);
+      const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originFuncDecl, [])) : t.callExpression(originFuncDecl, []);
       const resId = path.scope.generateUidIdentifier('_res');
       const resDecl = t.variableDeclaration('const', [
         t.variableDeclarator(resId, funcCall)
       ]);
       // 尾部插入
-      const post = Helper.buildPostInject(path, varName, 0);
+      const post = Helper.buildPostInject(path, varName, 1);
       // 返回值
       const ret = t.returnStatement(resId);
 
@@ -122,13 +122,13 @@ const CodeDecorator: Visitor<PluginPass> = {
       // 原函数
       const originFunc = t.arrowFunctionExpression([], path.node.body, path.node.async);
       // 方法调用
-      const funcCall = t.callExpression(originFunc, []);
+      const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originFunc, [])) : t.callExpression(originFunc, []);
       const resId = path.scope.generateUidIdentifier('_res');
       const resDecl = t.variableDeclaration('const', [
         t.variableDeclarator(resId, funcCall)
       ]);
       // 尾部插入
-      const post = Helper.buildPostInject(path, varName, 0);
+      const post = Helper.buildPostInject(path, varName, 1);
       // 返回值
       const ret = t.returnStatement(resId);
 
@@ -167,13 +167,13 @@ const CodeDecorator: Visitor<PluginPass> = {
       const originFunc = t.functionExpression(null, [], path.node.body, path.node.generator, path.node.async);
       if (!path.node.generator) {
         // 方法调用
-        const funcCall =  t.callExpression(originFunc, []);
+        const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originFunc, [])) : t.callExpression(originFunc, []);
         const resId = path.scope.generateUidIdentifier('_res');
         const resDecl = t.variableDeclaration('const', [
           t.variableDeclarator(resId, funcCall)
         ]);
         // 尾部插入
-        const post = Helper.buildPostInject(path, varName, 0);
+        const post = Helper.buildPostInject(path, varName, 1);
         // 返回值
         const ret = t.returnStatement(resId);
         const objectMethod = t.objectMethod(
@@ -194,7 +194,7 @@ const CodeDecorator: Visitor<PluginPass> = {
           t.variableDeclarator(resId, funcCall)
         ]);
         // 尾部插入
-        const post = Helper.buildPostInject(path, varName, 0);
+        const post = Helper.buildPostInject(path, varName, 1);
         // 返回值
         const ret = t.returnStatement(resId);
         const objectMethod = t.objectMethod(
@@ -236,13 +236,13 @@ const CodeDecorator: Visitor<PluginPass> = {
       // 原函数
       const originFunc = t.arrowFunctionExpression([], path.node.body, path.node.async);
       // 方法调用
-      const funcCall = t.callExpression(originFunc, []);
+      const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originFunc, [])) : t.callExpression(originFunc, []);
       const resId = path.scope.generateUidIdentifier('_res');
       const resDecl = t.variableDeclaration('const', [
         t.variableDeclarator(resId, funcCall)
       ]);
       // 尾部插入
-      const post = Helper.buildPostInject(path, varName, 0);
+      const post = Helper.buildPostInject(path, varName, 1);
       // 返回值
       const ret = t.returnStatement(resId);
 
