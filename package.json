@@ -1,7 +1,7 @@
 {
   "name": "babel-plugin-transform-slow-func-detecter",
-  "version": "1.1.1",
-  "description": "拦截react-natve的press事件，并发送埋点数据",
+  "version": "2.0.0",
+  "description": "分析js运行过程中是否存在慢方法",
   "main": "lib/index.js",
   "scripts": {
     "dev": "rm -rf lib && tsc -w",

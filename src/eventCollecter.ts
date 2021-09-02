@@ -1,16 +1,16 @@
 type SfdEvent = {
-  fileName: String;
-  row: number;
-  column: number;
-  isAsync: Boolean;
-  isGenerator: Boolean;
-  funcName: String;
-  time: number;
-  endTime: number;
-  duration: number;
-  timeFromInitTime: number;
-  endTimeFromInitTime: number;
-  count: number;
+  fileName: String;           // 文件地址
+  row: number;                // 方法所在行
+  column: number;             // 方法所在列
+  isAsync: Boolean;           // 是否是异步方法
+  isGenerator: Boolean;       // Generator方法
+  funcName: String;           // 方法名称
+  time: number;               // 开始时间
+  endTime: number;            // 结束时间
+  duration: number;           // 时长
+  timeFromInitTime: number;   // 方法开始时间 - 应用启动时间
+  endTimeFromInitTime: number;// 方法结束时间 - 应用启动时间
+  count: number;              // 方法调用次数
 };
 
 export default class EventCollecter {
