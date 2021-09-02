@@ -17,7 +17,7 @@ export default declare((api, opt, dir) => {
         }
 
         const funcName = 'ArrowFunctionExpression';
-        Helper.printTransformInfo(path, state, dir, funcName);
+        Helper.printTransformInfo(path, state, opt ,dir, funcName);
 
         // 头部插入
         const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
@@ -31,7 +31,7 @@ export default declare((api, opt, dir) => {
           t.variableDeclarator(resId, funcCall)
         ]);
         // 尾部插入
-        const post = Helper.buildPostInject(path, varName, 1);
+        const post = Helper.buildPostInject(varName);
         // 返回值
         const ret = t.returnStatement(resId);
 
@@ -49,7 +49,7 @@ export default declare((api, opt, dir) => {
         }
 
         const funcName = path.node.id?.name;
-        Helper.printTransformInfo(path, state, dir, funcName);
+        Helper.printTransformInfo(path, state, opt ,dir, funcName);
 
         // 头部插入
         const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
@@ -63,7 +63,7 @@ export default declare((api, opt, dir) => {
           t.variableDeclarator(resId, funcCall)
         ]);
         // 尾部插入
-        const post = Helper.buildPostInject(path, varName, 1);
+        const post = Helper.buildPostInject(varName);
         // 返回值
         const ret = t.returnStatement(resId);
 
@@ -86,7 +86,7 @@ export default declare((api, opt, dir) => {
         }
 
         const funcName = path.node.id?.name;
-        Helper.printTransformInfo(path, state, dir, funcName);
+        Helper.printTransformInfo(path, state, opt ,dir, funcName);
 
         // 头部插入
         const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
@@ -101,7 +101,7 @@ export default declare((api, opt, dir) => {
           t.variableDeclarator(resId, funcCall)
         ]);
         // 尾部插入
-        const post = Helper.buildPostInject(path, varName, 1);
+        const post = Helper.buildPostInject(varName);
         // 返回值
         const ret = t.returnStatement(resId);
 
@@ -131,7 +131,7 @@ export default declare((api, opt, dir) => {
         } else if (path.node.key.type === 'StringLiteral' || path.node.key.type === 'NumericLiteral') {
           funcName = String(path.node.key.value);
         }
-        Helper.printTransformInfo(path, state, dir, funcName);
+        Helper.printTransformInfo(path, state, opt ,dir, funcName);
 
         // 头部插入
         const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
@@ -146,7 +146,7 @@ export default declare((api, opt, dir) => {
             t.variableDeclarator(resId, funcCall)
           ]);
           // 尾部插入
-          const post = Helper.buildPostInject(path, varName, 1);
+          const post = Helper.buildPostInject(varName);
           // 返回值
           const ret = t.returnStatement(resId);
           const objectMethod = t.objectMethod(
@@ -167,7 +167,7 @@ export default declare((api, opt, dir) => {
             t.variableDeclarator(resId, funcCall)
           ]);
           // 尾部插入
-          const post = Helper.buildPostInject(path, varName, 1);
+          const post = Helper.buildPostInject(varName);
           // 返回值
           const ret = t.returnStatement(resId);
           const objectMethod = t.objectMethod(
@@ -202,7 +202,7 @@ export default declare((api, opt, dir) => {
         } else if (path.node.key.type === 'StringLiteral' || path.node.key.type === 'NumericLiteral') {
           funcName = String(path.node.key.value);
         }
-        Helper.printTransformInfo(path, state, dir, funcName);
+        Helper.printTransformInfo(path, state, opt ,dir, funcName);
         // 头部插入
         const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
         const pre = Helper.buildPreInject(varName, path, state, dir, funcName);
@@ -215,7 +215,7 @@ export default declare((api, opt, dir) => {
           t.variableDeclarator(resId, funcCall)
         ]);
         // 尾部插入
-        const post = Helper.buildPostInject(path, varName, 1);
+        const post = Helper.buildPostInject(varName);
         // 返回值
         const ret = t.returnStatement(resId);
 

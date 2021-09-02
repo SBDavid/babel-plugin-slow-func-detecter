@@ -27,27 +27,35 @@ export default class Helper {
     }) as Statement;
   }
 
-  static buildPostInject(path: NodePath<Function>, varName: Identifier, runDuration: number): Statement[]{
+  static buildPostInject(varName: Identifier): Statement[]{
 
     const temp = `
-      const ENDTIME = Date.now();
-      if (ENDTIME - SDFINFO.time > ${runDuration}) {
-        console.info('SFD: ' + String(ENDTIME - SDFINFO.time) + ' path: ' + SDFINFO.fileName + ':' + SDFINFO.row + ':' + SDFINFO.column + ' funcName: ' + SDFINFO.funcName + ' ayc: ' + SDFINFO.isAsync + ' genrt: ' + SDFINFO.isGenerator);
-      }
+      const _sfd_collector = require('babel-plugin-transform-slow-func-detecter/lib/eventCollecter').default;
+      _sfd_collector.receiveEvent({
+        fileName: SDFINFO.fileName + ':' + SDFINFO.row + ':' + SDFINFO.column,
+        row: SDFINFO.row,
+        column: SDFINFO.column,
+        isAsync: SDFINFO.isAsync,
+        isGenerator: SDFINFO.isGenerator,
+        funcName: SDFINFO.funcName,
+        time: SDFINFO.time,
+        endTime: Date.now()
+      });
     `;
 
     return template(temp)({
-      SDFINFO: varName,
-      ENDTIME: path.scope.generateUidIdentifierBasedOnNode(path.node, '_endTime')
+      SDFINFO: varName
     }) as Statement[];
   }
 
-  static printTransformInfo(path: NodePath<Function>, state: PluginPass, basedir: String,funcName?: String) {
-    const filename = state.file.opts.filename;
-    const row = path.node.loc?.start.line;
-    const column = path.node.loc?.start.column;
-    const isAsync = path.node.async === true;
-    const isGenerator = path.node.generator === true;
-    console.info(`${path.node.type}: ${filename?.replace(basedir+'/', "")}:${row}:${column} funcName: ${funcName} ayc: ${isAsync} genrt: ${isGenerator}`);
+  static printTransformInfo(path: NodePath<Function>, state: PluginPass, opt: any, basedir: String,funcName?: String) {
+    if (opt.printTransformInfo === true) {
+      const filename = state.file.opts.filename;
+      const row = path.node.loc?.start.line;
+      const column = path.node.loc?.start.column;
+      const isAsync = path.node.async === true;
+      const isGenerator = path.node.generator === true;
+      console.info(`${path.node.type}: ${filename?.replace(basedir+'/', "")}:${row}:${column} funcName: ${funcName} ayc: ${isAsync} genrt: ${isGenerator}`);
+    }
   }
 }
