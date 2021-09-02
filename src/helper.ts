@@ -8,11 +8,11 @@ export default class Helper {
     return  typeof filename === 'string' && filename.indexOf('node_modules') == -1;
   }
 
-  static buildPreInject(varName: Identifier, path: NodePath<Function>, state: PluginPass, funcName?: String): Statement{
+  static buildPreInject(varName: Identifier, path: NodePath<Function>, state: PluginPass, basedir: String, funcName?: String): Statement{
 
     const temp = `
       const SDFINFO = {
-        fileName: '${state.file.opts.filename}',
+        fileName: '${state.file.opts.filename?.replace(basedir+'/', '')}',
         row: ${path.node.loc?.start.line},
         column: ${path.node.loc?.start.column},
         isAsync: ${path.node.async === true},
@@ -42,12 +42,12 @@ export default class Helper {
     }) as Statement[];
   }
 
-  static printTransformInfo(path: NodePath<Function>, state: PluginPass, funcName?: String) {
+  static printTransformInfo(path: NodePath<Function>, state: PluginPass, basedir: String,funcName?: String) {
     const filename = state.file.opts.filename;
     const row = path.node.loc?.start.line;
     const column = path.node.loc?.start.column;
     const isAsync = path.node.async === true;
     const isGenerator = path.node.generator === true;
-    console.info(`${path.node.type}: ${filename}:${row}:${column} funcName: ${funcName} ayc: ${isAsync} genrt: ${isGenerator}`);
+    console.info(`${path.node.type}: ${filename?.replace(basedir+'/', "")}:${row}:${column} funcName: ${funcName} ayc: ${isAsync} genrt: ${isGenerator}`);
   }
 }
