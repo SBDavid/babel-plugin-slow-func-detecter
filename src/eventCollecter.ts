@@ -20,12 +20,9 @@ export default class EventCollecter {
   static maxDuration = 0;
   static maxCount = 0
 
-  static init(maxDuration: number, maxCount: number, onReport?: (e: SfdEvent) => void) {
+  static init(maxDuration: number, maxCount: number) {
     EventCollecter.maxDuration = maxDuration;
     EventCollecter.maxCount = maxCount;
-    if (onReport !== undefined) {
-      EventCollecter.onReport = onReport;
-    }
   }
 
   static onReport(e: SfdEvent) {
