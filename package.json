@@ -9,7 +9,9 @@
     "babel": "babel ./src --watch --out-dir lib --extensions '.ts,.tsx,.js'",
     "exe": "node lib/index.js"
   },
-  "author": "",
+  "repository": "https://github.com/SBDavid/babel-plugin-slow-func-detecter",
+  "homepage": "https://github.com/SBDavid/babel-plugin-slow-func-detecter#readme",
+  "author": "jiawei.tang <billl89@126.com> (https://github.com/SBDavid)",
   "license": "ISC",
   "dependencies": {
     "@babel/helper-plugin-utils": "^7.14.5"
