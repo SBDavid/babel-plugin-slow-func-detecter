@@ -35,46 +35,51 @@ export default declare((api, opt, dir) => {
         // 返回值
         const ret = t.returnStatement(resId);
 
-        var arrayFunc = t.arrowFunctionExpression(path.node.params, t.blockStatement([pre, resDecl, ...post, ret]), path.node.async);
+        var arrayFunc = t.arrowFunctionExpression(path.node.params, t.blockStatement([...pre, resDecl, post, ret]), path.node.async);
         path.replaceWith(arrayFunc);
         path.skip();
       }
     },
     FunctionDeclaration: {
       exit(path: NodePath<FunctionDeclaration>, state: PluginPass) {
-
-        if (path.node.generator) {
+        try {
+          if (path.node.generator) {
+            path.skip();
+            return;
+          }
+  
+          const funcName = path.node.id?.name;
+          Helper.printTransformInfo(path, state, opt ,dir, funcName);
+  
+          // 头部插入
+          const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
+          const pre = Helper.buildPreInject(varName, path, state, dir, funcName);
+          // 原函数体
+          const originFuncDecl = t.arrowFunctionExpression([], path.node.body, path.node.async);
+          // 方法调用
+          const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originFuncDecl, [])) : t.callExpression(originFuncDecl, []);
+          const resId = path.scope.generateUidIdentifier('_res');
+          const resDecl = t.variableDeclaration('const', [
+            t.variableDeclarator(resId, funcCall)
+          ]);
+          // 尾部插入
+          const post = Helper.buildPostInject(varName);
+          // 返回值
+          const ret = t.returnStatement(resId);
+  
+          var funcDecl = t.functionDeclaration(
+            path.node.id, path.node.params,
+            t.blockStatement([...pre, resDecl, post, ret]),
+            path.node.generator,
+            path.node.async
+            );
+          path.replaceWith(funcDecl);
           path.skip();
-          return;
+        } catch (e) {
+          console.error('FunctionDeclaration error', Helper.getFilePath(path, state, dir));
+          console.error(e);
         }
-
-        const funcName = path.node.id?.name;
-        Helper.printTransformInfo(path, state, opt ,dir, funcName);
-
-        // 头部插入
-        const varName = path.scope.generateUidIdentifierBasedOnNode(path.node, '_sdfinfo');
-        const pre = Helper.buildPreInject(varName, path, state, dir, funcName);
-        // 原函数体
-        const originFuncDecl = t.arrowFunctionExpression([], path.node.body, path.node.async);
-        // 方法调用
-        const funcCall = path.node.async === true ? t.awaitExpression(t.callExpression(originFuncDecl, [])) : t.callExpression(originFuncDecl, []);
-        const resId = path.scope.generateUidIdentifier('_res');
-        const resDecl = t.variableDeclaration('const', [
-          t.variableDeclarator(resId, funcCall)
-        ]);
-        // 尾部插入
-        const post = Helper.buildPostInject(varName);
-        // 返回值
-        const ret = t.returnStatement(resId);
-
-        var funcDecl = t.functionDeclaration(
-          path.node.id, path.node.params,
-          t.blockStatement([pre, resDecl, ...post, ret]),
-          path.node.generator,
-          path.node.async
-          );
-        path.replaceWith(funcDecl);
-        path.skip();
+        
       }
     },
     FunctionExpression: {
@@ -107,7 +112,7 @@ export default declare((api, opt, dir) => {
 
         const functionExpression = t.functionExpression(
           path.node.id, path.node.params,
-          t.blockStatement([pre, ...post,resDecl, ret]),
+          t.blockStatement([...pre,resDecl, post, ret]),
           path.node.generator,
           path.node.async);
         path.replaceWith(functionExpression);
@@ -153,7 +158,7 @@ export default declare((api, opt, dir) => {
             path.node.kind,
             path.node.key,
             path.node.params,
-            t.blockStatement([pre, resDecl, ...post, ret]),
+            t.blockStatement([...pre, resDecl, post, ret]),
             path.node.computed,
             path.node.generator,
             path.node.async,
@@ -174,7 +179,7 @@ export default declare((api, opt, dir) => {
             path.node.kind,
             path.node.key,
             path.node.params,
-            t.blockStatement([pre, resDecl, ...post, ret]),
+            t.blockStatement([...pre, resDecl, post, ret]),
             path.node.computed,
             path.node.generator,
             path.node.async,
@@ -223,7 +228,7 @@ export default declare((api, opt, dir) => {
           path.node.kind,
           path.node.key,
           path.node.params,
-          t.blockStatement([pre, resDecl, ...post, ret]),
+          t.blockStatement([...pre, resDecl, post, ret]),
           path.node.computed,
           path.node.static,
           path.node.generator,

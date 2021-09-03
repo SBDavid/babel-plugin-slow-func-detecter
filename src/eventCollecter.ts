@@ -11,6 +11,8 @@ type SfdEvent = {
   timeFromInitTime: number;   // 方法开始时间 - 应用启动时间
   endTimeFromInitTime: number;// 方法结束时间 - 应用启动时间
   count: number;              // 方法调用次数
+  startSeq: number;           // 开始次序
+  endSeq: number;             // 结束次序
 };
 
 export default class EventCollecter {
@@ -27,10 +29,12 @@ export default class EventCollecter {
   }
 
   static onReport(e: SfdEvent) {
-    console.info(`SDF: ${e.duration} startTime[${e.timeFromInitTime}] count[${e.count}] async[${e.isAsync || e.isGenerator}] ${e.funcName} ${e.fileName}`)
+    console.info(`SDF: ${e.duration} startTime[${e.timeFromInitTime}] count[${e.count}] seq[${e.startSeq}-${e.endSeq}] async[${e.isAsync || e.isGenerator}] ${e.funcName} ${e.fileName}`)
   }
 
-  static initTime: number = 0;
+  static initTime = 0;
+  static startSeq = 0;
+  static endSeq = 0;
 
   static counter: Map<String, number> = new Map();
 

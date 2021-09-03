@@ -59,5 +59,7 @@ type SfdEvent = {
   timeFromInitTime: number;   // 方法开始时间 - 应用启动时间
   endTimeFromInitTime: number;// 方法结束时间 - 应用启动时间
   count: number;              // 方法调用次数
+  startSeq: number;           // 开始次序
+  endSeq: number;             // 结束次序
 };
 ```
