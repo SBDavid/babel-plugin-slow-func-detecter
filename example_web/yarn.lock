@@ -1938,10 +1938,10 @@ babel-plugin-transform-regenerator@^6.24.1:
   dependencies:
     regenerator-transform "^0.10.0"
 
-babel-plugin-transform-slow-func-detecter@^2.2.5:
-  version "2.2.5"
-  resolved "https://registry.yarnpkg.com/babel-plugin-transform-slow-func-detecter/-/babel-plugin-transform-slow-func-detecter-2.2.5.tgz#eb36b927bba7c21cc0a24f84639551cef144347d"
-  integrity sha512-qlENc1YbiVQ8N4JvIYPxWy1nz8BxlJkAd3lRumYHA61PC6X+Xa7n6/l58WMyOGvR9sjFxltQNUSBU6liawaAbQ==
+babel-plugin-transform-slow-func-detecter@^2.2.6:
+  version "2.2.6"
+  resolved "https://registry.yarnpkg.com/babel-plugin-transform-slow-func-detecter/-/babel-plugin-transform-slow-func-detecter-2.2.6.tgz#7b2802004d226e465aecaffbeabd02f912b98bc6"
+  integrity sha512-+k6KNldypytUM5oHn4ckhdFHIG7Wab5j/XcRNrEKMpdE/b7U70YAsEgqKWBrGSlP15NufAtPObcocluqVykuSA==
   dependencies:
     "@babel/helper-plugin-utils" "^7.14.5"
 
