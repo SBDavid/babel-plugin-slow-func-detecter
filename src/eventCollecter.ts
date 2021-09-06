@@ -26,7 +26,7 @@ export default class EventCollecter {
   }
 
   static onReport(e: SfdEvent) {
-    console.info(`SDF: ${e.duration} startTime[${e.timeFromInitTime}] count[${e.count}] seq[${e.startSeq}-${e.endSeq}] async[${e.isAsync || e.isGenerator}] ${e.funcName} ${e.fileName}`)
+    console.info(`SDF: 时长[${e.duration}] 开始时间[${e.timeFromInitTime}] 调用测试[${e.count}] 开始结束次序[${e.startSeq}-${e.endSeq}] 异步[${e.isAsync || e.isGenerator}] 方法名[${e.funcName}] 文件名 ${e.fileName}`)
   }
 
   static initTime = 0;

@@ -40,7 +40,10 @@ import sdf from 'babel-plugin-transform-slow-func-detecter/lib/eventCollecter';
 sdf.init(1, 2);
 ```
 
-### 3. 报警事件参数说明
+### 3. 通过日志查看慢函数
+通过在 init 方法中设置过滤参数，超出阈值的函数调用会在控制台输出日志
+
+### 4. 报警事件参数说明
 
 ```js
 type SfdEvent = {
