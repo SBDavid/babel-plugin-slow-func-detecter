@@ -5,7 +5,8 @@ import Helper from './helper';
 import type { ArrowFunctionExpression, ClassMethod, FunctionDeclaration, ObjectMethod, FunctionExpression } from "@babel/types";
 
 export default declare((api, opt, dir) => {
-  api.env;
+
+  const apienv = api.env();
 
   // decorator方案，使用新的方法包裹原来的方法
   const CodeDecorator: Visitor<PluginPass> = {
@@ -248,6 +249,12 @@ export default declare((api, opt, dir) => {
         try {
           // 文件过滤
           if (!Helper.fileFilter(state.file.opts.filename)) {
+            return;
+          }
+
+          // 生产环境跳过
+          const env = opt.productionEnvValue ?? 'production';
+          if (apienv === env) {
             return;
           }
 

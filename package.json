@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-transform-slow-func-detecter",
-  "version": "2.2.5",
+  "version": "2.2.7",
   "description": "分析js运行过程中是否存在慢方法",
   "main": "lib/index.js",
   "types": "lib/",

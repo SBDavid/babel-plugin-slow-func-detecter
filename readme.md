@@ -1,6 +1,6 @@
 ## babel-plugin-transform-slow-func-detecter
 
-这个插件用于分析js运行过程中是否存在慢方法，仅在开发环境中使用，请勿在线上使用。
+这个插件用于分析js运行过程中是否存在慢方法。
 
 已实现功能
 - 目前支持 react-native, web, node 平台
@@ -24,6 +24,7 @@ module.exports = {
       'babel-plugin-transform-slow-func-detecter',
       {
         printTransformInfo: false, // 是否打印编译阶段的日志
+        productionEnvValue: 'production' // 如果 NODE_ENV === ${productionEnvValue} 则跳过此插件，方便在生产环境中使用
       },
     ],
   ],
