@@ -40,6 +40,7 @@ import sdf from 'babel-plugin-transform-slow-func-detecter/lib/eventCollecter';
 // 参数二（必选）：最大调用次数，范围 >= 0
 // 参数三（可选）：报警事件回调
 sdf.init(1, 2, (e) => {
+  // 建议先不填写第三个参数，使用默认输出
   console.info(e);
 });
 ```
