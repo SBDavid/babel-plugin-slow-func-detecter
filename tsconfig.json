@@ -1,4 +1,7 @@
 {
+  "exclude": [
+    "./example_web/"
+  ],
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
@@ -23,9 +26,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
-    "outDir": "lib",
+    "outDir": "lib/",
     "declaration": true,
     "emitDeclarationOnly": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "sourceMap": true
   }
 }

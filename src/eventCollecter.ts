@@ -17,12 +17,18 @@ type SfdEvent = {
 
 export default class EventCollecter {
 
+  // 防止堆栈溢出
+  static isReporting = false;
+
   static maxDuration = 0;
   static maxCount = 0
 
-  static init(maxDuration: number, maxCount: number) {
+  static init(maxDuration: number, maxCount: number, onReport: (e: SfdEvent) => void) {
     EventCollecter.maxDuration = maxDuration;
     EventCollecter.maxCount = maxCount;
+    if (onReport !== undefined) {
+      EventCollecter.onReport = onReport;
+    }
   }
 
   static onReport(e: SfdEvent) {
@@ -37,6 +43,10 @@ export default class EventCollecter {
 
   // 接受事件
   static receiveEvent(e: SfdEvent) {
+
+    if (EventCollecter.isReporting) {
+      return;
+    }
 
     // 设置时间比较基准
     if (EventCollecter.initTime === 0) {
@@ -56,8 +66,10 @@ export default class EventCollecter {
     e.count = count;
     EventCollecter.counter.set(e.fileName, count);
 
-    if (e.duration > EventCollecter.maxDuration || e.count > EventCollecter.maxCount) {
+    if (e.duration >= EventCollecter.maxDuration || e.count >= EventCollecter.maxCount) {
+      EventCollecter.isReporting = true;
       EventCollecter.onReport(e);
+      EventCollecter.isReporting = false;
     }
   }
 }

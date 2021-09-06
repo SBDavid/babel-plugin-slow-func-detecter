@@ -1,6 +1,10 @@
 import { render } from 'react-dom';
 import * as React from 'react';
 import 'regenerator-runtime/runtime';
+import sdf from 'babel-plugin-transform-slow-func-detecter/lib/eventCollecter';
+sdf.init(0, 0, (e) => {
+    console.info(e);
+});
 
 interface Props {
 }
@@ -43,14 +47,8 @@ class Clock extends React.Component<Props, State> {
                         date: this.state.date + 1
                     });
                 })
-                
-                setTimeout(() => {
-                    this.setState({
-                        date: this.state.date + 1
-                    });
-                })
             },
-            1000
+            5000
         );
     }
 

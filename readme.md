@@ -37,7 +37,10 @@ import sdf from 'babel-plugin-transform-slow-func-detecter/lib/eventCollecter';
 
 // 参数一（必选）：最大执行时长，范围 >= 0
 // 参数二（必选）：最大调用次数，范围 >= 0
-sdf.init(1, 2);
+// 参数三（可选）：报警事件回调
+sdf.init(1, 2, (e) => {
+  console.info(e);
+});
 ```
 
 ### 3. 通过日志查看慢函数
