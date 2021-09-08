@@ -18,7 +18,7 @@ export default class EventCollecter {
     static isReporting: boolean;
     static maxDuration: number;
     static maxCount: number;
-    static init(maxDuration: number, maxCount: number, onReport: (e: SfdEvent) => void): void;
+    static init(maxDuration: number, maxCount: number, onReport?: (e: SfdEvent) => void): void;
     static onReport(e: SfdEvent): void;
     static initTime: number;
     static startSeq: number;
