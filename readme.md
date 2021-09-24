@@ -13,7 +13,7 @@
 ### 1. 安装
 
 ```shell
-yarn add --save babel-plugin-transform-slow-func-detecter
+yarn add  babel-plugin-transform-slow-func-detecter --save --dev
 ```
 
 babel 配置
